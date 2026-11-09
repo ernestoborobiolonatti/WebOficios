@@ -1,25 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using WebOficios.Models;
 
 namespace WebOficios.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        // CAMBIO AQUÍ: Nombre sin guiones bajos
+        private readonly OrtNuevasTecnologias1Context _context;
+
+        // CAMBIO AQUÍ: Nombre sin guiones bajos
+        public HomeController(OrtNuevasTecnologias1Context context)
         {
-            return View();
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            // Consultamos la tabla de profesionales e incluimos su categoría
+            var listaProfesionales = await _context.Profesionales.Include(p => p.Categoria).ToListAsync();
+            return View(listaProfesionales);
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

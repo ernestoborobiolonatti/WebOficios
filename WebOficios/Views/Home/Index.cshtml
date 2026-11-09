@@ -1,97 +1,65 @@
-﻿@{
+﻿@model IEnumerable<WebOficios.Models.Profesionale>
+
+@{
     ViewData["Title"] = "Inicio - Web de Oficios";
 }
 
-<!-- Sección Principal / Buscador (Hero Section) -->
-<div class="bg-dark text-white py-5 mb-5 rounded-3 text-center" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/img/hero-bg.jpg') no-repeat center center; background-size: cover;">
+<!-- Seccion Principal -->
+<div class="text-dark py-5 mb-5 rounded-3 text-center" style="background: #e8f5e9; border: 1px solid #c8e6c9;">
     <div class="container py-4">
-        <h1 class="display-4 fw-bold text-warning">Encuentra al profesional ideal para tu hogar</h1>
+        <h1 class="display-4 fw-bold text-dark">Encontra el profesional ideal para tu hogar</h1>
         <p class="lead mb-4">Plomeros, electricistas, carpinteros y más, calificados por la comunidad.</p>
 
-        <!-- Barra de Búsqueda -->
+        <!-- Barra de Busqueda -->
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form class="d-flex gap-2 bg-white p-2 rounded-pill shadow">
+                <form class="d-flex gap-2 bg-white p-2 rounded-pill shadow-sm border">
                     <input class="form-control border-0 rounded-pill ps-4" type="search" placeholder="¿Qué oficio necesitas? (Ej: Electricista, Plomero...)" aria-label="Buscar">
-                    <button class="btn btn-warning rounded-pill px-4 fw-bold" type="submit">Buscar</button>
+                    <button class="btn btn-success rounded-pill px-4 fw-bold" type="submit">Buscar</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Sección de Profesionales Destacados -->
+<!-- Seccion Destacados -->
 <div class="container mb-5">
     <h2 class="text-center mb-4 fw-bold">Profesionales Disponibles</h2>
 
-    <!-- Grid de Tarjetas (Cards) -->
+    <!-- Grid Bootstrap -->
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
 
-        <!-- Tarjeta 1: Electricista -->
-        <div class="col">
-            <div class="card h-100 shadow-sm hover-shadow">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="fs-1 me-3">⚡</span>
-                        <div>
-                            <h5 class="card-title mb-0 fw-bold">Carlos Mendoza</h5>
-                            <span class="badge bg-primary">Electricista Matriculado</span>
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var profesional in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <!-- SQL -->
+                                <h5 class="card-title mb-1 fw-bold">@profesional.NombreProfesional</h5>
+                                
+                                <span class="badge bg-success">@profesional.Categoria?.NombreCategoria</span>
+                            </div>
+                            <p class="card-text text-muted">Especialista disponible en el rubro. Ofrece servicios garantizados a la comunidad.</p>
+                            <div class="mb-3 text-warning">
+                                ★ ★ ★ ★ ★ <span class="text-muted small">(Nueva reseña)</span>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <button class="btn btn-outline-dark w-100 fw-bold">Ver Perfil y Contactar</button>
                         </div>
                     </div>
-                    <p class="card-text text-muted">Instalaciones eléctricas residenciales, cortocircuitos, tableros y mantenimiento en general. Atención 24 horas.</p>
-                    <div class="mb-3 text-warning">
-                        ★ ★ ★ ★ ☆ <span class="text-muted small">(12 reseñas)</span>
-                    </div>
                 </div>
-                <div class="card-footer bg-transparent border-0 pb-3">
-                    <button class="btn btn-outline-primary w-100 fw-bold">Ver Perfil y Contactar</button>
-                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">No se encontraron profesionales disponibles en este momento.</p>
             </div>
-        </div>
-
-        <!-- Tarjeta 2: Plomero -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="fs-1 me-3">🔧</span>
-                        <div>
-                            <h5 class="card-title mb-0 fw-bold">Juan Pérez</h5>
-                            <span class="badge bg-success">Plomero / Gasista</span>
-                        </div>
-                    </div>
-                    <p class="card-text text-muted">Reparación de fugas de agua y gas, instalación de artefactos, destapaciones y mantenimiento de termotanques.</p>
-                    <div class="mb-3 text-warning">
-                        ★ ★ ★ ★ ★ <span class="text-muted small">(28 reseñas)</span>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent border-0 pb-3">
-                    <button class="btn btn-outline-primary w-100 fw-bold">Ver Perfil y Contactar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tarjeta 3: Carpintero -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="fs-1 me-3">🪚</span>
-                        <div>
-                            <h5 class="card-title mb-0 fw-bold">Andrés Silva</h5>
-                            <span class="badge bg-secondary">Carpintero</span>
-                        </div>
-                    </div>
-                    <p class="card-text text-muted">Fabricación y reparación de muebles a medida, aberturas, colocación de pisos flotantes y restauración de madera.</p>
-                    <div class="mb-3 text-warning">
-                        ★ ★ ★ ★ ☆ <span class="text-muted small">(8 reseñas)</span>
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent border-0 pb-3">
-                    <button class="btn btn-outline-primary w-100 fw-bold">Ver Perfil y Contactar</button>
-                </div>
-            </div>
-        </div>
+        }
 
     </div>
 </div>
