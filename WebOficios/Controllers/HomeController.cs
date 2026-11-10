@@ -1,58 +1,40 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 using WebOficios.Models;
 
 namespace WebOficios.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly OrtNuevasTecnologias1Context _context;
+
         
-        private static readonly List<Publicacion> _publicacionesSimuladas = new List<Publicacion>
+        public HomeController(OrtNuevasTecnologias1Context context)
         {
-            new Publicacion
-            {
-                Titulo = "Instalaciones Eléctricas Mendoza",
-                Descripcion = "Cortocircuitos, tableros y mantenimiento residencial las 24 horas.",
-                Categoria = "Electricista",
-                Localidad = "Caballito",
-                CostoServicio = 45000.0
-            },
-            new Publicacion
-            {
-                Titulo = "Plomería y Gas Pérez",
-                Descripcion = "Reparación de fugas de agua, destapaciones de cañerías e instalación de sanitarios.",
-                Categoria = "Plomero",
-                Localidad = "Flores",
-                CostoServicio = 38000.0
-            },
-            new Publicacion
-            {
-                Titulo = "Muebles a Medida Silva",
-                Descripcion = "Fabricación, armado y restauración de muebles en maderas macizas.",
-                Categoria = "Carpintero",
-                Localidad = "Palermo",
-                CostoServicio = 60000.0
-            }
-        };
+            _context = context;
+        }
 
-        // metodo buscarPublicaciones de la clase Marketplace
-        public IActionResult Index(string buscarTexto)
+        // metodo que lee desde SQL Server
+        public async Task<IActionResult> Index(string buscarTexto)
         {
-            var resultados = _publicacionesSimuladas;
+            
+            var consulta = _context.Publicaciones.AsQueryable();
 
-            // filtro dinámico
+            
             if (!string.IsNullOrEmpty(buscarTexto))
             {
-                resultados = _publicacionesSimuladas.Where(p =>
-                    p.Categoria.Contains(buscarTexto, System.StringComparison.OrdinalIgnoreCase) ||
-                    p.Localidad.Contains(buscarTexto, System.StringComparison.OrdinalIgnoreCase) ||
-                    p.Titulo.Contains(buscarTexto, System.StringComparison.OrdinalIgnoreCase)
-                ).ToList();
+                consulta = consulta.Where(p =>
+                    p.Categoria.Contains(buscarTexto) ||
+                    p.Localidad.Contains(buscarTexto) ||
+                    p.Titulo.Contains(buscarTexto)
+                );
             }
 
-            // devuelve la lista de publicaciones procesada a la pantalla que ve el usuarioo
-            return View(resultados);
+           
+            var listaReal = await consulta.ToListAsync();
+            return View(listaReal);
         }
 
         public IActionResult Privacy()
