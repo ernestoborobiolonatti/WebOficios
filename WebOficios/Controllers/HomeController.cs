@@ -1,25 +1,58 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using WebOficios.Models;
 
 namespace WebOficios.Controllers
 {
     public class HomeController : Controller
     {
-        // CAMBIO AQUÍ: Nombre sin guiones bajos
-        private readonly OrtNuevasTecnologias1Context _context;
-
-        // CAMBIO AQUÍ: Nombre sin guiones bajos
-        public HomeController(OrtNuevasTecnologias1Context context)
+        
+        private static readonly List<Publicacion> _publicacionesSimuladas = new List<Publicacion>
         {
-            _context = context;
-        }
+            new Publicacion
+            {
+                Titulo = "Instalaciones Eléctricas Mendoza",
+                Descripcion = "Cortocircuitos, tableros y mantenimiento residencial las 24 horas.",
+                Categoria = "Electricista",
+                Localidad = "Caballito",
+                CostoServicio = 45000.0
+            },
+            new Publicacion
+            {
+                Titulo = "Plomería y Gas Pérez",
+                Descripcion = "Reparación de fugas de agua, destapaciones de cañerías e instalación de sanitarios.",
+                Categoria = "Plomero",
+                Localidad = "Flores",
+                CostoServicio = 38000.0
+            },
+            new Publicacion
+            {
+                Titulo = "Muebles a Medida Silva",
+                Descripcion = "Fabricación, armado y restauración de muebles en maderas macizas.",
+                Categoria = "Carpintero",
+                Localidad = "Palermo",
+                CostoServicio = 60000.0
+            }
+        };
 
-        public async Task<IActionResult> Index()
+        // metodo buscarPublicaciones de la clase Marketplace
+        public IActionResult Index(string buscarTexto)
         {
-            // Consultamos la tabla de profesionales e incluimos su categoría
-            var listaProfesionales = await _context.Profesionales.Include(p => p.Categoria).ToListAsync();
-            return View(listaProfesionales);
+            var resultados = _publicacionesSimuladas;
+
+            // filtro dinámico
+            if (!string.IsNullOrEmpty(buscarTexto))
+            {
+                resultados = _publicacionesSimuladas.Where(p =>
+                    p.Categoria.Contains(buscarTexto, System.StringComparison.OrdinalIgnoreCase) ||
+                    p.Localidad.Contains(buscarTexto, System.StringComparison.OrdinalIgnoreCase) ||
+                    p.Titulo.Contains(buscarTexto, System.StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+            }
+
+            // devuelve la lista de publicaciones procesada a la pantalla que ve el usuarioo
+            return View(resultados);
         }
 
         public IActionResult Privacy()
