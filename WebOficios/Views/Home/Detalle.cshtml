@@ -1,0 +1,49 @@
+﻿@model WebOficios.Models.Publicacion
+
+@{
+    ViewData["Title"] = Model.Titulo;
+}
+
+<div class="container my-5">
+    
+    <a href="@Url.Action("Index", "Home")" class="btn btn-link text-dark ps-0 mb-4 text-decoration-none">← Volver al inicio</a>
+
+    <div class="row g-5">
+        
+        <div class="col-lg-7">
+            <div class="p-4 bg-light rounded-3 border">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-success fs-6">@Model.Categoria</span>
+                    <span class="text-muted">📍 @Model.Localidad</span>
+                </div>
+                <h1 class="fw-bold mb-3">@Model.Titulo</h1>
+                <p class="fs-5 text-secondary mb-4">@Model.Descripcion</p>
+                <hr />
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">Costo estimado del servicio:</span>
+                    <span class="fw-bold text-dark fs-3">$@Model.CostoServicio</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-lg-5">
+            <div class="card shadow-sm border p-4">
+                <h4 class="fw-bold mb-3 text-success">Solicitar Presupuesto</h4>
+                <p class="text-muted small">Describe el trabajo que necesitas realizar para que el profesional pueda presupuestarlo.</p>
+
+                <form action="@Url.Action("EnviarPresupuesto", "Home")" method="post">
+                    
+                    <input type="hidden" name="publicacionId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label for="detalleDelTrabajo" class="form-label fw-bold small text-secondary">Detalle del trabajo</label>
+                        <textarea class="form-control" id="detalleDelTrabajo" name="detalleDelTrabajo" rows="5" placeholder="Ej: Necesito reparar una fuga de agua en la cocina..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 fw-bold py-2">Enviar Solicitud</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

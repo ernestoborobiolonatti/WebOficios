@@ -16,7 +16,7 @@ namespace WebOficios.Controllers
             _context = context;
         }
 
-        // metodo que lee desde SQL Server
+        
         public async Task<IActionResult> Index(string buscarTexto)
         {
             
@@ -41,5 +41,20 @@ namespace WebOficios.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> Detalle(int id)
+        {
+            var publicacion = await _context.Publicaciones.FindAsync(id);
+            return View(publicacion);
+        }
+
+        
+        [HttpPost]
+        public IActionResult EnviarPresupuesto(int publicacionId, string detalleDelTrabajo)
+        {
+            TempData["MensajeExito"] = "¡Tu solicitud de presupuesto fue enviada con éxito!";
+            return RedirectToAction("Index");
+        }
     }
+
 }
