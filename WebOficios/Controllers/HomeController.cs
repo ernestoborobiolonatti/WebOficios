@@ -47,5 +47,20 @@ namespace WebOficios.Controllers
             TempData["MensajeExito"] = "La solicitud de presupuesto fue enviada con exito!";
             return RedirectToAction("Index");
         }
+        public IActionResult Crear()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Crear(Publicacion nuevaPublicacion)
+        {
+            _context.Publicaciones.Add(nuevaPublicacion);
+            _context.SaveChanges();
+
+            TempData["MensajeExito"] = "¡Tu publicación fue creada y guardada en la base de datos!";
+            return RedirectToAction("Index");
+        }
+
     }
+
 }

@@ -1,0 +1,59 @@
+﻿@model WebOficios.Models.Publicacion
+
+@{
+    ViewData["Title"] = "Publicar mi Oficio";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border p-4">
+                <h2 class="fw-bold mb-2 text-success text-center">Publicar un Oficio</h2>
+                <p class="text-muted text-center small mb-4">Completa los datos de tu servicio para que aparezca en el catálogo principal.</p>
+
+                <form action="@Url.Action("Crear", "Home")" method="post" onsubmit="return validarCosto()">
+                    <div class="mb-3">
+                        <label for="Titulo" class="form-label fw-bold small">Título del Anuncio (*)</label>
+                        <input type="text" class="form-control" id="Titulo" name="Titulo" placeholder="Ej: Electricista Matriculado - Urgencias" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Categoria" class="form-label fw-bold small">Rubro / Categoría (*)</label>
+                        <select class="form-select" id="Categoria" name="Categoria" required>
+                            <option value="">Selecciona un oficio...</option>
+                            <option value="Electricista">Electricista</option>
+                            <option value="Plomero">Plomero</option>
+                            <option value="Carpintero">Carpintero</option>
+                            <option value="Gasista">Gasista</option>
+                            <option value="Pintor">Pintor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Localidad" class="form-label fw-bold small">Localidad / Barrio (*)</label>
+                        <input type="text" class="form-control" id="Localidad" name="Localidad" placeholder="Ej: Caballito, Palermo, Flores..." required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="CostoServicio" class="form-label fw-bold small">Costo Estimado del Servicio ($) (*)</label>
+                        <input type="number" class="form-control" id="CostoServicio" name="CostoServicio" placeholder="Ej: 35000" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="Descripcion" class="form-label fw-bold small">Descripción de tus trabajos (*)</label>
+                        <textarea class="form-control" id="Descripcion" name="Descripcion" rows="3" placeholder="Detalla qué tipo de arreglos realizas..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 fw-bold py-2">Guardar y Publicar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function validarCosto() {
+        var costo = document.getElementById("CostoServicio").value;
+
+        if (Number(costo) <= 0) {
+            alert("El monto del servicio debe ser mayor a 0 pesos.");
+            return false;
+        }
+        return true;
+    }
+</script>
