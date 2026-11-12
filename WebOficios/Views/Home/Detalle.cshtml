@@ -5,11 +5,7 @@
 }
 
 <div class="container my-5">
-    
-    <a href="@Url.Action("Index", "Home")" class="btn btn-link text-dark ps-0 mb-4 text-decoration-none">← Volver al inicio</a>
-
     <div class="row g-5">
-        
         <div class="col-lg-7">
             <div class="p-4 bg-light rounded-3 border">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -26,19 +22,22 @@
             </div>
         </div>
 
-        
         <div class="col-lg-5">
             <div class="card shadow-sm border p-4">
                 <h4 class="fw-bold mb-3 text-success">Solicitar Presupuesto</h4>
-                <p class="text-muted small">Describe el trabajo que necesitas realizar para que el profesional pueda presupuestarlo.</p>
+                <p id="mensajeAyuda" class="text-muted small">Completa los datos para recibir una cotización.</p>
 
-                <form action="@Url.Action("EnviarPresupuesto", "Home")" method="post">
-                    
+                <form action="@Url.Action("EnviarPresupuesto", "Home")" method="post" onsubmit="return validarFormulario()">
                     <input type="hidden" name="publicacionId" value="@Model.Id" />
 
                     <div class="mb-3">
-                        <label for="detalleDelTrabajo" class="form-label fw-bold small text-secondary">Detalle del trabajo</label>
-                        <textarea class="form-control" id="detalleDelTrabajo" name="detalleDelTrabajo" rows="5" placeholder="Ej: Necesito reparar una fuga de agua en la cocina..." required></textarea>
+                        <label for="emailCliente" class="form-label fw-bold small">Tu Correo Electrónico (*)</label>
+                        <input type="email" class="form-control" id="emailCliente" name="emailCliente" placeholder="ejemplo@mail.com" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="detalleDelTrabajo" class="form-label fw-bold small">Detalle del trabajo (*)</label>
+                        <textarea class="form-control" id="detalleDelTrabajo" name="detalleDelTrabajo" rows="4" placeholder="Describe el problema..." required></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-dark w-100 fw-bold py-2">Enviar Solicitud</button>
@@ -47,3 +46,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    function validarFormulario() {
+        var texto = document.getElementById("detalleDelTrabajo").value;
+        var cajaMensaje = document.getElementById("mensajeAyuda");
+
+        if (texto.length < 10) {
+            alert("Por favor, escribe una descripción un poco más detallada (mínimo 10 caracteres).");
+            cajaMensaje.innerHTML = "⚠️ El detalle es muy corto. Por favor amplíalo.";
+            cajaMensaje.style.color = "red";
+            return false;
+        }
+
+        return true;
+    }
+</script>

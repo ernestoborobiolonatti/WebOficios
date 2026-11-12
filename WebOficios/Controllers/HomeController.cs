@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Threading.Tasks;
 using WebOficios.Models;
 
 namespace WebOficios.Controllers
@@ -10,51 +8,44 @@ namespace WebOficios.Controllers
     {
         private readonly OrtNuevasTecnologias1Context _context;
 
-        
         public HomeController(OrtNuevasTecnologias1Context context)
         {
             _context = context;
         }
 
-        
-        public async Task<IActionResult> Index(string buscarTexto)
+        // metodo de la guia pag8y14
+        public IActionResult Index(string buscarTexto)
         {
-            
-            var consulta = _context.Publicaciones.AsQueryable();
+            var consulta = from p in _context.Publicaciones
+                           select p;
 
-            
             if (!string.IsNullOrEmpty(buscarTexto))
             {
-                consulta = consulta.Where(p =>
-                    p.Categoria.Contains(buscarTexto) ||
-                    p.Localidad.Contains(buscarTexto) ||
-                    p.Titulo.Contains(buscarTexto)
-                );
+                consulta = from p in _context.Publicaciones
+                           where p.Categoria.Contains(buscarTexto)
+                              || p.Localidad.Contains(buscarTexto)
+                              || p.Titulo.Contains(buscarTexto)
+                           select p;
             }
 
-           
-            var listaReal = await consulta.ToListAsync();
-            return View(listaReal);
+            var listaPublicaciones = consulta.ToList();
+            return View(listaPublicaciones);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Detalle(int id)
         {
-            return View();
-        }
+            var publicacion = (from p in _context.Publicaciones
+                               where p.Id == id
+                               select p).FirstOrDefault();
 
-        public async Task<IActionResult> Detalle(int id)
-        {
-            var publicacion = await _context.Publicaciones.FindAsync(id);
             return View(publicacion);
         }
 
-        
         [HttpPost]
         public IActionResult EnviarPresupuesto(int publicacionId, string detalleDelTrabajo)
         {
-            TempData["MensajeExito"] = "¡Tu solicitud de presupuesto fue enviada con éxito!";
+            TempData["MensajeExito"] = "La solicitud de presupuesto fue enviada con exito!";
             return RedirectToAction("Index");
         }
     }
-
 }
