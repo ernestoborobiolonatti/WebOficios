@@ -42,8 +42,22 @@ namespace WebOficios.Controllers
         }
 
         [HttpPost]
-        public IActionResult EnviarPresupuesto(int publicacionId, string detalleDelTrabajo)
+        public IActionResult EnviarPresupuesto(int publicacionId, string emailCliente, string detalleDelTrabajo)
         {
+            var nuevaSolicitud = new SolicitudPresupuesto
+            {
+                PublicacionId = publicacionId,
+                EmailCliente = emailCliente,
+                detalleDelTrabajo = detalleDelTrabajo,
+                fechaSolicitud = System.DateTime.Now.ToString("dd/MM/yyyy"),
+                horaSolicitud = System.DateTime.Now.ToString("HH:mm"),
+                Respondida = false
+            };
+            _context.SolicitudesPresupuesto.Add(nuevaSolicitud);
+            _context.SaveChanges();
+
+            TempData["MensajeExito"] = "¡Tu solicitud de presupuesto fue enviada y guardada con éxito!";
+            return RedirectToAction("Index");
             TempData["MensajeExito"] = "La solicitud de presupuesto fue enviada con exito!";
             return RedirectToAction("Index");
         }

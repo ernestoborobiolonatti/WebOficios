@@ -3,7 +3,8 @@
     public class SolicitudPresupuesto
     {
         public int Id { get; set; }
-        public int PublicacionId { get; set; } 
+        public int PublicacionId { get; set; }
+        public string EmailCliente { get; set; } = string.Empty;
         public string detalleDelTrabajo { get; set; } = string.Empty;
         public string fechaSolicitud { get; set; } = string.Empty;
         public string horaSolicitud { get; set; } = string.Empty;
